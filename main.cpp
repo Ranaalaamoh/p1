@@ -40,6 +40,7 @@ void FileOrganize(string &path)
             fs::rename(file.path(),destination);
         }
     }
+    ShellExecute(NULL,"open",path.c_str(),NULL,NULL,SW_SHOWNORMAL);
 }
 
 int main()
