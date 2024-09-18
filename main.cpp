@@ -7,13 +7,13 @@
 using namespace std;
 namespace fs = std::filesystem;
 
-void FileOrganize(string &path)
+void FileOrganize(string &path , string &imag , string &docm , string &vid)
 {
     fs::path dir(path);
 
-    fs::path img=dir/"img";
-    fs::path vids=dir/"vids";
-    fs::path doc=dir/"doc";
+    fs::path img=dir/imag;
+    fs::path vids=dir/vid;
+    fs::path doc=dir/docm;
     fs::path other=dir/"other";
 
 
@@ -45,9 +45,46 @@ void FileOrganize(string &path)
 
 int main()
 {
- string path ;
+ string path , imag , vid, doc ;
     cout<<"enter the path";
     getline(cin,path);
-    FileOrganize(path);
+    cout<<"[0] to modifiy setting "<<endl<<"[1] to organize directory"<<endl<<"Note:[0] your first time:";
+    int x;
+    cin>>x;
+    if(x==0)
+    {
+        cout<<"enter the img folder name: ";
+        cin>>imag;
+        cout<<"enter the doc folder name";
+        cin>>doc;
+        cout<<"enter the vid folder name: ";
+        cin>>vid;
+        ofstream filecsv("data.csv");
+        if(!filecsv)
+        {
+            cout<<"error opening data.csv file";
+        }
+        filecsv<<imag<<endl<<doc<<endl<<vid;
+        filecsv.close();
+    }
+    else
+    {
+        ifstream file("data.csv");
+        if(!file)
+        {
+            cout<<"error opening data.csv file";
+        }
+        string line ;
+        int counter=0;
+        while(getline(file,line))
+        {
+            if(counter==0)imag=line;
+            else if (counter==1)doc=line;
+            else vid=line;
+            counter++;
+        }
+
+    }
+    FileOrganize(path ,imag,doc,vid);
     return 0;
 }
